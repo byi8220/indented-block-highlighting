@@ -1,6 +1,7 @@
 {
     "name": "indented-block-highlighting",
     "displayName": "Indented Block Highlighting",
+    "icon": "indenting-icon.png",
     "description": "Highlights everything covered by the currently selected line's indentation level.",
     "version": "0.0.1",
     "publisher": "byi8220",
@@ -11,7 +12,7 @@
         "Other"
     ],
     "main": "./out/extension",
-    "activationEvents" : [
+    "activationEvents": [
         "*"
     ],
     "contributes": {
@@ -21,12 +22,19 @@
             "properties": {
                 "blockhighlight.background": {
                     "type": "array",
-                    "default": ["200", "100", "255", ".05"],
+                    "default": [
+                        "200",
+                        "100",
+                        "255",
+                        ".05"
+                    ],
                     "description": "RGBA array for block highlighting (Default [\"200\", \"100\", \"255\", \".05\"])"
                 },
-                "blockhighlight.omit":{
+                "blockhighlight.omit": {
                     "type": "array",
-                    "default": ["plaintext"],
+                    "default": [
+                        "plaintext"
+                    ],
                     "description": "Array of file languageIDs that won't be parsed for indent highlighting"
                 }
             }
@@ -45,5 +53,14 @@
         "tslint": "^5.8.0",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
+    },
+    "license": "UNLICENSED",
+    "dependencies": {
+        "vsce": "^1.37.1",
+        "yo": "^2.0.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/byi8220/indented-block-highlighting.git"
     }
 }

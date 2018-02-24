@@ -1,0 +1,49 @@
+{
+    "name": "indented-block-highlighting",
+    "displayName": "Indented Block Highlighting",
+    "description": "Highlights everything covered by the currently selected line's indentation level.",
+    "version": "0.0.1",
+    "publisher": "byi8220",
+    "engines": {
+        "vscode": "^1.20.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "main": "./out/extension",
+    "activationEvents" : [
+        "*"
+    ],
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Indented Block Highlighting configuration",
+            "properties": {
+                "blockhighlight.background": {
+                    "type": "array",
+                    "default": ["200", "100", "255", ".05"],
+                    "description": "RGBA array for block highlighting (Default [\"200\", \"100\", \"255\", \".05\"])"
+                },
+                "blockhighlight.omit":{
+                    "type": "array",
+                    "default": ["plaintext"],
+                    "description": "Array of file languageIDs that won't be parsed for indent highlighting"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}

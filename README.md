@@ -6,7 +6,7 @@ Highlights the intented area that contains the cursor.
 
 Highlight the selected block automatically like so:
 
-![Color is 200 red, 100 green, 255 blue, 0.05 alpha](usage.gif "Use Example")
+![Color is 200 red, 100 green, 255 blue, 0.05 alpha](usage.gif "Example")
 
 
 ## Extension Settings

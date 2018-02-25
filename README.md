@@ -26,4 +26,4 @@ Unindented text is not highlighted; This is intentional.
 
 ### 1.0.0
 
-Release
+Release + Bug fixing

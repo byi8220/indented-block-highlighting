@@ -4,6 +4,7 @@
 import * as vscode from 'vscode';
 
 let highlightDecoration : vscode.TextEditorDecorationType;
+let currentDecoration : vscode.TextEditorDecorationType;
 let omitLanguages : string[];
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -29,6 +30,7 @@ export function deactivate() {
 }
 
 class BlockHL{
+
 
 
     public updateLine(){
@@ -57,7 +59,8 @@ class BlockHL{
             }
             
             // If top level statement that doesn't start a block the entire file is in it's context
-            if(topLine.lineNumber === botLine.lineNumber && topLine.firstNonWhitespaceCharacterIndex === 0){
+            if(editor.document.lineAt(editor.selection.active).firstNonWhitespaceCharacterIndex === 0
+                && !editor.document.lineAt(editor.selection.active).isEmptyOrWhitespace){
                 // Do nothing for now
                 this.unhighlightAll(editor);
             }else{
@@ -80,7 +83,6 @@ class BlockHL{
     findTop(editor :vscode.TextEditor){
         let line : vscode.TextLine = editor.document.lineAt(editor.selection.active);
         //If whitespace selected process closest nonwhitespace above it
-        
         while(line.isEmptyOrWhitespace && line.lineNumber > 0){
             line = editor.document.lineAt(line.lineNumber - 1);
         }
@@ -147,8 +149,12 @@ class BlockHL{
         if(highlightDecoration){
             highlightDecoration.dispose();
         }
+        if(currentDecoration){
+            currentDecoration.dispose();
+        }
         // Hard BG color
         let config = vscode.workspace.getConfiguration("blockhighlight");
+        let wholeLine : boolean = config.get("isWholeLine", true);
         let rgbaArray : string[] = config.get("background", ["200", "100", "255", ".05"]);
         let rgbaStr = "rgba("
                         .concat(rgbaArray[0]).concat(", ")
@@ -157,16 +163,25 @@ class BlockHL{
                         .concat(rgbaArray[3])
                         .concat(")");
         highlightDecoration = vscode.window.createTextEditorDecorationType(<vscode.DecorationRenderOptions>{
-            backgroundColor: rgbaStr
+            backgroundColor: rgbaStr,
+            isWholeLine : wholeLine
         });
-
+        currentDecoration = vscode.window.createTextEditorDecorationType(<vscode.DecorationRenderOptions>{
+            backgroundColor: rgbaStr,
+            isWholeLine : wholeLine
+        });
+        // Highlight currently selected line a bit more to emphasize it
         editor.setDecorations(highlightDecoration, [range]);
+        editor.setDecorations(currentDecoration, [editor.selection]);
         console.log("Highlighting called on " + rgbaStr);
     }
 
     unhighlightAll(editor :vscode.TextEditor){
         if(highlightDecoration){
             highlightDecoration.dispose();
+        }
+        if(currentDecoration){
+            currentDecoration.dispose();
         }
     }
 
@@ -183,7 +198,7 @@ class BHLController{
 
     public constructor(blockHL : BlockHL){
         this._blockHL = blockHL;
-        
+
         let subscriptions : vscode.Disposable[] = [];
         vscode.window.onDidChangeActiveTextEditor(this._onChangeActive, this, subscriptions);    
         vscode.window.onDidChangeTextEditorSelection(this._onLineChange, this, subscriptions);    

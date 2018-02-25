@@ -30,6 +30,11 @@
                     ],
                     "description": "RGBA array for block highlighting (Default [\"200\", \"100\", \"255\", \".05\"])"
                 },
+                "blockhighlight.isWholeLine":{
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Highlight the whole line or just the text?"
+                },
                 "blockhighlight.omit": {
                     "type": "array",
                     "default": [

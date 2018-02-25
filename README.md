@@ -15,6 +15,7 @@ This extension contributes the following settings:
 
 * `blockhighlight.background`: Change the highlight color
 * `blockhighlight.omit`: Array of languages that will not be parsed by this extension
+* `blockhighlight.isWholeLine`: Option to highlight the entire line or only the text
 
 ## Known Issues
 
@@ -23,6 +24,10 @@ This extension does not parse syntax, it simply checks indentation levels.
 Unindented text is not highlighted; This is intentional.
 
 ## Release Notes
+
+### 1.0.1
+
+Added Whole Lines
 
 ### 1.0.0
 

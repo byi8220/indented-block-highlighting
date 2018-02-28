@@ -6,6 +6,11 @@ import * as vscode from 'vscode';
 let highlightDecoration : vscode.TextEditorDecorationType;
 let currentDecoration : vscode.TextEditorDecorationType;
 let omitLanguages : string[];
+
+const TAB_SIZE = 4;
+
+// Table never gets deallocated, potential leak
+var lineTable = new Map(); // Line dict 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -59,7 +64,8 @@ class BlockHL{
             }
             
             // If top level statement that doesn't start a block the entire file is in it's context
-            if(editor.document.lineAt(editor.selection.active).firstNonWhitespaceCharacterIndex === 0
+            // if(editor.document.lineAt(editor.selection.active).firstNonWhitespaceCharacterIndex === 0
+            if(this.getIndentLevel(editor, editor.document.lineAt(editor.selection.active)) === 0
                 && !editor.document.lineAt(editor.selection.active).isEmptyOrWhitespace){
                 // Do nothing for now
                 this.unhighlightAll(editor);
@@ -96,7 +102,7 @@ class BlockHL{
         let indentLevel = NaN;
         while(line.lineNumber > 0){
             if(!line.isEmptyOrWhitespace){
-                let nextLevel = line.firstNonWhitespaceCharacterIndex;
+                let nextLevel = this.getIndentLevel(editor,line);
                 if(Number.isNaN(indentLevel)){
                     indentLevel = nextLevel;
                 }
@@ -117,8 +123,8 @@ class BlockHL{
 
         while(line.lineNumber < editor.document.lineCount - 1){
             if(!line.isEmptyOrWhitespace){
-                let nextLevel = line.firstNonWhitespaceCharacterIndex;
-                if(nextLevel <= topLine.firstNonWhitespaceCharacterIndex){
+                let nextLevel = this.getIndentLevel(editor, line);
+                if(nextLevel <= this.getIndentLevel(editor, topLine)){
                     return line;
                 }
             }
@@ -126,6 +132,37 @@ class BlockHL{
         }
         console.log("EOF Reached");
         return line;
+    }
+
+
+    /**
+     * Parses a line to get the indentation level manually
+     * Assumes line is already non-whitespace
+     * @param line Line to parse
+     * @returns Number of space-equivalents in the line
+     */
+    getIndentLevel(editor: vscode.TextEditor, line : vscode.TextLine){
+        if(lineTable.has(line)){
+            return lineTable.get(line);
+        }else{
+            let indentLevel = line.firstNonWhitespaceCharacterIndex;
+            let lineText = line.text;
+            for(var i = 0; i < indentLevel; i++){
+                if(lineText.charAt(i) === '\t'){
+                    indentLevel+= (TAB_SIZE - 1);
+                }
+            }
+            lineTable.set(line, indentLevel);
+            return indentLevel;
+        }
+    }
+
+    freeCurrentLine(){
+        let editor = vscode.window.activeTextEditor;
+        if(!editor){
+            return;
+        }
+        lineTable.delete(editor.document.lineAt(editor.selection.active));
     }
 
     pruneTrailingWhitespace(editor : vscode.TextEditor, bot : vscode.TextLine){
@@ -173,7 +210,7 @@ class BlockHL{
         // Highlight currently selected line a bit more to emphasize it
         editor.setDecorations(highlightDecoration, [range]);
         editor.setDecorations(currentDecoration, [editor.selection]);
-        console.log("Highlighting called on " + rgbaStr);
+        //console.log("Highlighting called on " + rgbaStr);
     }
 
     unhighlightAll(editor :vscode.TextEditor){
@@ -200,14 +237,19 @@ class BHLController{
         this._blockHL = blockHL;
 
         let subscriptions : vscode.Disposable[] = [];
-        vscode.window.onDidChangeActiveTextEditor(this._onChangeActive, this, subscriptions);    
+        vscode.window.onDidChangeActiveTextEditor(this._onChangeActive, this, subscriptions);
         vscode.window.onDidChangeTextEditorSelection(this._onLineChange, this, subscriptions);    
+        vscode.workspace.onDidChangeTextDocument(this._onChangeText,this, subscriptions);
 
         this._disposable = vscode.Disposable.from(...subscriptions);
     }
 
     dispose(){
         this._disposable.dispose();
+    }
+
+    private _onChangeText(){
+        this._blockHL.freeCurrentLine();
     }
 
     private _onChangeActive(){

@@ -3,7 +3,7 @@
     "displayName": "Indented Block Highlighting",
     "icon": "indenting-icon.png",
     "description": "Highlights everything covered by the currently selected line's indentation level.",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "publisher": "byi8220",
     "engines": {
         "vscode": "^1.20.0"
@@ -30,7 +30,7 @@
                     ],
                     "description": "RGBA array for block highlighting (Default [\"200\", \"100\", \"255\", \".05\"])"
                 },
-                "blockhighlight.isWholeLine":{
+                "blockhighlight.isWholeLine": {
                     "type": "boolean",
                     "default": true,
                     "description": "Highlight the whole line or just the text?"

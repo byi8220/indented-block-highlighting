@@ -259,7 +259,7 @@ class BHLController{
         let subscriptions : vscode.Disposable[] = [];
         vscode.window.onDidChangeActiveTextEditor(this._onChangeActive, this, subscriptions);
         vscode.window.onDidChangeTextEditorSelection(this._onLineChange, this, subscriptions);
-        vscode.window.onDidChangeTextEditorOptions(this._onChangeActive, this, subscriptions);
+        vscode.window.onDidChangeTextEditorOptions(this._onChangeOptions, this, subscriptions);
         vscode.workspace.onDidChangeTextDocument(this._onChangeText,this, subscriptions);
 
 

@@ -19,9 +19,10 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-**Tabs are arbitrarily considered to be 4 spaces wide for performance reasons**
-See open issues for details.
-This should not be a problem if working with the default editor.tabSize = 4, but this default is hardcoded into this extension as of now.
+**Improper indentation levels for lines with mixed whitespace**
+Indenting the **same** line with a mixture of tabs and spaces causes improper behavior because of how VSC autoadjusts whitespace
+Example:
+![Autoindent issue](whitespace-issue.png "Improper mixed whitespace issue.")
 
 This extension does not parse syntax, it simply checks indentation levels.
 
@@ -29,7 +30,11 @@ Unindented text is not highlighted; This is intentional.
 
 ## Release Notes
 
-### 1.0.1.1
+### 1.0.3
+
+Tabs size is now pulled in from each document.
+
+### ~~1.0.1.1~~ 1.0.2
 
 Fixed tabs being considered as 1 space
 

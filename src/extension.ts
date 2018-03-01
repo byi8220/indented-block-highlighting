@@ -7,7 +7,7 @@ let highlightDecoration : vscode.TextEditorDecorationType;
 let currentDecoration : vscode.TextEditorDecorationType;
 let omitLanguages : string[];
 
-const TAB_SIZE = 4;
+var TAB_SIZE = 4;
 
 // Table never gets deallocated, potential leak
 var lineTable = new Map(); // Line dict 
@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "indented-block-highlighting" is now active!');
+    console.log('Congratulations, your extension "indented-block-highlighting" is now active! (var ts)');
     let config = vscode.workspace.getConfiguration("blockhighlight");
     omitLanguages = config.get("omit", ["plaintext"]);
 
@@ -35,7 +35,6 @@ export function deactivate() {
 }
 
 class BlockHL{
-
 
 
     public updateLine(){
@@ -83,7 +82,12 @@ class BlockHL{
 
         // Timing
         var end = new Date().getTime();
+
+        //#region [rgba(255, 255, 255, 0.1)] Timing Output 
         console.log("Update Time: ".concat(String(end - start)));
+        console.log("Selected Line Level: " +
+            this.getIndentLevel(editor, editor.document.lineAt(editor.selection.active)));
+        //#endregion
     }
 
     findTop(editor :vscode.TextEditor){
@@ -120,11 +124,12 @@ class BlockHL{
 
     findBot(editor : vscode.TextEditor, topLine : vscode.TextLine){
         let line : vscode.TextLine = editor.document.lineAt(topLine.lineNumber + 1);
-
+        let baseLevel = this.getIndentLevel(editor, editor.document.lineAt(editor.selection.active));
         while(line.lineNumber < editor.document.lineCount - 1){
             if(!line.isEmptyOrWhitespace){
                 let nextLevel = this.getIndentLevel(editor, line);
-                if(nextLevel <= this.getIndentLevel(editor, topLine)){
+                if(nextLevel < baseLevel || nextLevel === 0){
+                //if(nextLevel <= this.getIndentLevel(editor, topLine)){
                     return line;
                 }
             }
@@ -142,19 +147,22 @@ class BlockHL{
      * @returns Number of space-equivalents in the line
      */
     getIndentLevel(editor: vscode.TextEditor, line : vscode.TextLine){
-        if(lineTable.has(line)){
-            return lineTable.get(line);
-        }else{
-            let indentLevel = line.firstNonWhitespaceCharacterIndex;
-            let lineText = line.text;
-            for(var i = 0; i < indentLevel; i++){
-                if(lineText.charAt(i) === '\t'){
-                    indentLevel+= (TAB_SIZE - 1);
-                }
+        // Deleet Cache block?
+        //if(lineTable.has(line)){
+        //   return lineTable.get(line);
+        // }else{
+        let indentLevel = line.firstNonWhitespaceCharacterIndex;
+        let lineText = line.text;
+        for(var i = 0; i < indentLevel; i++){
+            if(lineText.charAt(i) === '\t'){
+                indentLevel+= (TAB_SIZE - 1);
             }
-            lineTable.set(line, indentLevel);
-            return indentLevel;
         }
+        lineTable.set(line, indentLevel);
+        return indentLevel;
+
+        // Cache block end
+        // }
     }
 
     freeCurrentLine(){
@@ -178,8 +186,20 @@ class BlockHL{
         return newBot;
     }
 
+    setCurrentDocumentTabSize(){
+        let editor = vscode.window.activeTextEditor;
+        if(!editor){
+            return;
+        }
+        let tabs : number;
+        tabs = editor.options.tabSize as number;
+        TAB_SIZE = tabs;
+        console.log("Tab size of current document: " + TAB_SIZE);
+    }
+
     changeActive(){
         console.log("Active Window Changed");
+        this.setCurrentDocumentTabSize();
     }
 
     highlightRange(editor: vscode.TextEditor, range : vscode.Range){
@@ -212,7 +232,7 @@ class BlockHL{
         editor.setDecorations(currentDecoration, [editor.selection]);
         //console.log("Highlighting called on " + rgbaStr);
     }
-
+    
     unhighlightAll(editor :vscode.TextEditor){
         if(highlightDecoration){
             highlightDecoration.dispose();
@@ -238,14 +258,20 @@ class BHLController{
 
         let subscriptions : vscode.Disposable[] = [];
         vscode.window.onDidChangeActiveTextEditor(this._onChangeActive, this, subscriptions);
-        vscode.window.onDidChangeTextEditorSelection(this._onLineChange, this, subscriptions);    
+        vscode.window.onDidChangeTextEditorSelection(this._onLineChange, this, subscriptions);
+        vscode.window.onDidChangeTextEditorOptions(this._onChangeActive, this, subscriptions);
         vscode.workspace.onDidChangeTextDocument(this._onChangeText,this, subscriptions);
+
 
         this._disposable = vscode.Disposable.from(...subscriptions);
     }
 
     dispose(){
         this._disposable.dispose();
+    }
+
+    private _onChangeOptions(){
+        this._blockHL.setCurrentDocumentTabSize();
     }
 
     private _onChangeText(){

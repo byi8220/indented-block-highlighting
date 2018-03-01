@@ -19,9 +19,11 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-**Improper indentation levels for lines with mixed whitespace**
+**Improper indentation levels for lines with mixed whitespace:**
+
 Indenting the **same** line with a mixture of tabs and spaces causes improper behavior because of how VSC autoadjusts whitespace
-Example:
+
+Example of issue:
 ![Autoindent issue](whitespace-issue.png "Improper mixed whitespace issue.")
 
 This extension does not parse syntax, it simply checks indentation levels.

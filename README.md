@@ -17,6 +17,10 @@ This extension contributes the following settings:
 * `blockhighlight.omit`: Array of languages that will not be parsed by this extension
 * `blockhighlight.isWholeLine`: Option to highlight the entire line or only the text
 
+## Report Issues
+
+Report issues [here](https://github.com/byi8220/indented-block-highlighting/issues)
+
 ## Known Issues
 
 **Improper indentation levels for lines with mixed whitespace:**

@@ -34,6 +34,7 @@ export function deactivate() {
 
 }
 
+
 class BlockHL{
 
 
@@ -212,6 +213,7 @@ class BlockHL{
         // Hard BG color
         let config = vscode.workspace.getConfiguration("blockhighlight");
         let wholeLine : boolean = config.get("isWholeLine", true);
+        let accentCurrent : boolean = config.get("accentCurrentLine", true);
         let rgbaArray : string[] = config.get("background", ["200", "100", "255", ".05"]);
         let rgbaStr = "rgba("
                         .concat(rgbaArray[0]).concat(", ")
@@ -227,9 +229,11 @@ class BlockHL{
             backgroundColor: rgbaStr,
             isWholeLine : wholeLine
         });
-        // Highlight currently selected line a bit more to emphasize it
+        
         editor.setDecorations(highlightDecoration, [range]);
-        editor.setDecorations(currentDecoration, [editor.selection]);
+        if(accentCurrent){
+            editor.setDecorations(currentDecoration, [editor.selection]);
+        }
         //console.log("Highlighting called on " + rgbaStr);
     }
     

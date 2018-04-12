@@ -35,6 +35,11 @@
                     "default": true,
                     "description": "Highlight the whole line or just the text?"
                 },
+                "blockhighlight.accentCurrentLine": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Highlight the line the cursor is in with a lighter color"
+                },
                 "blockhighlight.omit": {
                     "type": "array",
                     "default": [

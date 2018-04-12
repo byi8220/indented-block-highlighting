@@ -16,6 +16,7 @@ This extension contributes the following settings:
 * `blockhighlight.background`: Change the highlight color
 * `blockhighlight.omit`: Array of languages that will not be parsed by this extension
 * `blockhighlight.isWholeLine`: Option to highlight the entire line or only the text
+* `blockhighlight.accentCurrentLine`: Option to choose to accent the current line more intensely than the rest of the block
 
 ## Known Issues
 
@@ -31,6 +32,10 @@ This extension does not parse syntax, it simply checks indentation levels.
 Unindented text is not highlighted; This is intentional.
 
 ## Release Notes
+
+### 1.0.5
+
+Accent Current Line feature added.
 
 ### 1.0.3
 

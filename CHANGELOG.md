@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.0.5]
+
+Accent Current Line feature added
+
+## [1.0.4]
+
+VSCE jank
+
 ## [1.0.3]
 
 Tabs size is now pulled in from each document.

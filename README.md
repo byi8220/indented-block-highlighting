@@ -33,6 +33,10 @@ Unindented text is not highlighted; This is intentional.
 
 ## Release Notes
 
+### 1.0.6
+
+Require Hoek 5.0.3
+
 ### 1.0.5
 
 Accent Current Line feature added.

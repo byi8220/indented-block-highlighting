@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.6]
+
+Require Hoek 5.0.3
+
 ## [1.0.5]
 
 Accent Current Line feature added

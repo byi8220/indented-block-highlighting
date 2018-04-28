@@ -58,16 +58,17 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.61",
         "tslint": "^5.8.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "typescript": "^2.8.3",
+        "vscode": "^1.1.16"
     },
     "license": "UNLICENSED",
     "dependencies": {
-        "vsce": "^1.37.1",
-        "yo": "^2.0.1"
+        "hoek": "^5.0.3",
+        "vsce": "^1.39.0",
+        "yo": "^2.0.2"
     },
     "repository": {
         "type": "git",

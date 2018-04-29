@@ -33,6 +33,10 @@ Unindented text is not highlighted; This is intentional.
 
 ## Release Notes
 
+### 1.0.7
+
+Removed package-lock.json
+
 ### 1.0.6
 
 Require Hoek 5.0.3

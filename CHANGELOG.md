@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.7]
+
+Removed package-lock.json
+
 ## [1.0.6]
 
 Require Hoek 5.0.3

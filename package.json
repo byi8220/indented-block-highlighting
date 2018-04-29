@@ -3,7 +3,7 @@
     "displayName": "Indented Block Highlighting",
     "icon": "indenting-icon.png",
     "description": "Highlights everything covered by the currently selected line's indentation level.",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "publisher": "byi8220",
     "engines": {
         "vscode": "^1.20.0"
@@ -66,7 +66,6 @@
     },
     "license": "UNLICENSED",
     "dependencies": {
-        "hoek": "^5.0.3",
         "vsce": "^1.39.0",
         "yo": "^2.0.2"
     },

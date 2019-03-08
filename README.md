@@ -18,6 +18,10 @@ This extension contributes the following settings:
 * `blockhighlight.isWholeLine`: Option to highlight the entire line or only the text
 * `blockhighlight.accentCurrentLine`: Option to choose to accent the current line more intensely than the rest of the block
 
+## Report Issues
+
+Report issues [here](https://github.com/byi8220/indented-block-highlighting/issues)
+
 ## Known Issues
 
 **Improper indentation levels for lines with mixed whitespace:**
